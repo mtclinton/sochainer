@@ -61,3 +61,22 @@ def get_price(coin):
         return content['data']
     else:
         raise Exception(response.json()['data'])
+
+def get_balance(coin, address):
+    if coin not in coins:
+        raise Exception(coin + " is not supported. Please try BTC, DASH, ZEC, DOGE, LTC")
+
+    cfg = ConfigParser()
+    cfg.read_string(resources.read_text("sochainer", "config.cfg"))
+    url = cfg.get("feed", "url")
+
+    response = requests.get(url + 'get_address_balance/' + coin+"/"+address)
+
+    if response.status_code == 200:
+        # everything went swimmingly
+        # parse the response as JSON
+        content = response.json()
+
+        return content['data']
+    else:
+        raise Exception(response.json()['data'])
